@@ -1,9 +1,19 @@
 document.addEventListener('DOMContentLoaded', () => {
     const player = document.getElementById('player');
     const gameContainer = document.querySelector('.game-container');
+    const startScreen = document.getElementById('start-screen');
+    const startButton = document.getElementById('start-button');
+    const gameOverScreen = document.getElementById('game-over');
     let isJumping = false;
     let gravity = 0.9;
     let isGameOver = false;
+
+    function startGame() {
+        startScreen.style.display = 'none';
+        gameContainer.style.display = 'block';
+        document.addEventListener('keydown', handleJump);
+        createObstacle();
+    }
 
     function jump() {
         if (isJumping) return;
@@ -44,11 +54,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (obstaclePosition < -50) {
                 clearInterval(obstacleInterval);
                 gameContainer.removeChild(obstacle);
-            } else if (obstaclePosition > 0 && obstaclePosition < 50 && player.style.bottom === '0px') {
+            } else if (obstaclePosition > 50 && obstaclePosition < 100 && parseInt(player.style.bottom) <= 50) {
                 clearInterval(obstacleInterval);
                 isGameOver = true;
                 document.removeEventListener('keydown', handleJump);
-                alert('Game Over');
+                gameOverScreen.style.display = 'block';
             } else {
                 obstaclePosition -= 5;
                 obstacle.style.left = `${obstaclePosition}px`;
@@ -64,6 +74,5 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    document.addEventListener('keydown', handleJump);
-    createObstacle();
+    startButton.addEventListener('click', startGame);
 });
